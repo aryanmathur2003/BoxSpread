@@ -10,11 +10,11 @@ import yfinance as yf
 
 # Create your views here.
 class runScript(APIView):
-    def get(self, request):
+    def get(self, request, exp_date):
         try:
             stock_data = yf.Ticker('SPY')
             current_price = stock_data.history(period='1d')['Close'].iloc[-1]
-            options = stock_data.option_chain('2024-01-12')
+            options = stock_data.option_chain(exp_date)
             # Access call options
             calls = options.calls
             # Access put options

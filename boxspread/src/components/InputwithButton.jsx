@@ -1,4 +1,35 @@
-const InputWithButton = () => {
+import React, { useState } from "react";
+
+const InputWithButton = ({ setSearchResult }) => {
+  const [expirationInput, setExpirationInput] = useState("");
+
+  const handleSearch = () => {
+    console.log("expirationInput:", expirationInput);
+    const url = `http://127.0.0.1:8000/runScript/${expirationInput}/`;
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("GET request response:", data);
+        setSearchResult(data);
+      })
+      .catch((error) => {
+        console.error("Error making GET request:", error);
+      });
+  };
+
+  const handleKeyDown = (e) => {
+    // Check if the Enter key is pressed (keyCode 13)
+    if (e.key === "Enter") {
+      handleSearch();
+      e.target.blur();
+    }
+  };
+
   return (
     <div className="relative shadow-lg">
       <label htmlFor="Search" className="sr-only">
@@ -9,12 +40,19 @@ const InputWithButton = () => {
       <input
         type="text"
         id="Search"
-        placeholder="YYYY-DD-MM"
+        placeholder="YYYY-MM-DD"
         className="w-full rounded-md border-gray-200 py-3 pl-2 pe-10 shadow-sm text-2xl"
+        value={expirationInput}
+        onChange={(e) => setExpirationInput(e.target.value)}
+        onKeyDown={handleKeyDown} // Add the onKeyDown event handler
       />
 
       <span className="absolute inset-y-0 end-0 grid w-10 place-content-center">
-        <button type="button" className="text-gray-600 hover:text-gray-700">
+        <button
+          type="button"
+          className="text-gray-600 hover:text-gray-700"
+          onClick={handleSearch}
+        >
           <span className="sr-only">Search</span>
 
           <svg

@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import OptionTable from "./components/OptionTable";
 import InputwithButton from "./components/InputwithButton";
 
 const App = () => {
+  const [searchResult, setSearchResult] = useState(null);
+
+  const handleSearchResult = (result) => {
+    setSearchResult(result);
+  };
+
   return (
     <div>
       <div className="bg-neutral-100 h-screen">
@@ -10,24 +16,30 @@ const App = () => {
           Box Spread Calculator
         </div>
         <div className="flex flex-col px-32 h-4/5">
-          <div className="grid grid-cols-2 gap-16 gap-y-24 pt-8 mx-36">
+          <div className="grid grid-cols-2 gap-16 pt-8 mx-36">
             <div className="flex items-center justify-center">
               <div className="h-1/4 w-2/5">
                 <p className="text-2xl font-light text-center flex justify-start pb-1 pl-2">
                   Expiration Date
                 </p>
-                <InputwithButton />
+                <InputwithButton setSearchResult={handleSearchResult} />
               </div>
             </div>
-            <div>
-              <OptionTable />
-            </div>
-            <div>
-              <OptionTable />
-            </div>
-            <div>
-              <OptionTable />
-            </div>
+            {searchResult && (
+              <div>
+                <OptionTable data={["Final", ...searchResult.final]} />
+              </div>
+            )}
+            {searchResult && (
+              <div>
+                <OptionTable data={["Calls", ...searchResult.calls]} />
+              </div>
+            )}
+            {searchResult && (
+              <div>
+                <OptionTable data={["Puts", ...searchResult.puts]} />
+              </div>
+            )}
           </div>
         </div>
       </div>
