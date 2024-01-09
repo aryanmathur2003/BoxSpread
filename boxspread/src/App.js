@@ -27,17 +27,17 @@ const App = () => {
             </div>
             {searchResult && (
               <div>
-                <OptionTable data={["Final", ...searchResult.final]} />
+                <OptionTable data={[...searchResult.strikes, "Final", ...searchResult.final]} />
               </div>
             )}
             {searchResult && (
               <div>
-                <OptionTable data={["Calls", ...searchResult.calls]} />
+                <OptionTable data={[...searchResult.strikes, "Calls", ...searchResult.calls]} />
               </div>
             )}
             {searchResult && (
               <div>
-                <OptionTable data={["Puts", ...searchResult.puts]} />
+                <OptionTable data={[...searchResult.strikes, "Puts", ...searchResult.puts]} />
               </div>
             )}
           </div>

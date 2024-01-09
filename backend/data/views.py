@@ -30,7 +30,10 @@ class runScript(APIView):
             print(calls_filtered)
             callSpreads = []
             putSpreads = []
+            priceTable = []
+
             for x in range(7):
+                priceTable.append(calls_filtered.iloc[x].strike)
                 firstElement = round(calls_filtered.iloc[x].lastPrice, 2)
                 secondElement = round(calls_filtered.iloc[x+1].lastPrice, 2)
                 callSpreads.append(round((firstElement - secondElement) * 100))
@@ -38,14 +41,17 @@ class runScript(APIView):
                 putsFirstElement = round(puts_filtered.iloc[x+1].lastPrice, 2)
                 putsSecondElement = round(puts_filtered.iloc[x].lastPrice, 2)
                 putSpreads.append(round((putsFirstElement - putsSecondElement) * 100))
+
             final = []
             for x in range(7):
                 final.append(callSpreads[x]+putSpreads[x])
+            
 
             ans = {
                 'calls': callSpreads,
                 'puts': putSpreads,
                 'final': final,
+                'strikes': priceTable
 
             }
             print(callSpreads)
