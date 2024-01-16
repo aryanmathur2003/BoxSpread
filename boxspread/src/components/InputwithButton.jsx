@@ -5,7 +5,7 @@ const InputWithButton = ({ setSearchResult }) => {
 
   const handleSearch = () => {
     console.log("expirationInput:", expirationInput);
-    const url = `http://127.0.0.1:8000/runScript/${expirationInput}/`;
+    const url = `https://boxspreadrestapi.onrender.com/runScript/${expirationInput}/`;
     fetch(url, {
       method: "GET",
       headers: {
