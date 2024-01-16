@@ -5,5 +5,5 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.index),
-    path('runScript/<str:exp_date>/', views.runScript.as_view()),
+    path('runScript/<str:exp_date>/<str:ticker>/', views.runScript.as_view()),
 ]

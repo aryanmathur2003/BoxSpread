@@ -24,11 +24,19 @@ def index(request):
 
 # Create your views here.
 class runScript(APIView):
-    def get(self, request, exp_date):
+    def get(self, request, exp_date, ticker):
         try:
-            stock_data = yf.Ticker('SPY')
+            try:
+                stock_data = yf.Ticker(ticker)
+            except Exception as e:
+                content = "Error fetching ticker"
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
             current_price = stock_data.history(period='1d')['Close'].iloc[-1]
-            options = stock_data.option_chain(exp_date)
+            try:
+                options = stock_data.option_chain(exp_date)
+            except Exception as e:
+                content = "Error fetching expiry date"
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)    
             # Access call options
             calls = options.calls
             # Access put options
@@ -65,7 +73,8 @@ class runScript(APIView):
                 'calls': callSpreads,
                 'puts': putSpreads,
                 'final': final,
-                'strikes': priceTable
+                'strikes': priceTable,
+                'currentPrice': current_price
 
             }
             print(callSpreads)
@@ -75,4 +84,4 @@ class runScript(APIView):
         
         except Exception as e:
             print(f"Error fetching and filtering data")
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_404_NOT_FOUND)
